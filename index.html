@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Засекреченная База Данных</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: "Courier New", Courier, monospace;
+      padding: 20px;
+    }
+    .console {
+      border: 2px solid #00ff00;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hidden {
+      display: none;
+    }
+    input, button, textarea {
+      background: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 8px;
+      font-family: inherit;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+    }
+    .output {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="console">
+    <pre id="login-screen">[ВВЕДИТЕ_ПАРОЛЬ]
+———————————-
+[ENTER_PASSWORD]</pre>
+    <input type="password" id="password-input" placeholder="Пароль" />
+    <button onclick="checkPassword()">Ввод</button>
+
+    <div id="main-interface" class="hidden">
+      <pre>
+[ДОБРО_ПОЖАЛОВАТЬ_В_БАЗУ ДАННЫХ]
+———————————
+[WELCOME_TO_DATA_BASE]
+
+———————————
+
+[ОЖИДАНИЕ_КОМАНДЫ 
+_ОТ_КОНСОЛИ]
+———————————
+[WAITING_FOR_COMMAND_OF_CONSOLE]</pre>
+      <button onclick="showAdd()">Добавить запись</button>
+      <button onclick="showView()">Просмотр записей</button>
+
+      <div id="add-section" class="hidden">
+        <p>[НОВАЯ_ЗАПИСЬ]</p>
+        <input id="title" placeholder="ВВЕДИТЕ_НАЗВАНИЕ/ЗАГОЛОВОК" />
+        <textarea id="description" placeholder="ВВЕДИТЕ_ОПИСАНИЕ/ИНФОРМАЦИЮ"></textarea>
+        <button onclick="addRecord()">Сохранить</button>
+      </div>
+
+      <div id="view-section" class="hidden">
+        <h3>Сохраненные записи:</h3>
+        <div id="records"></div>
+      </div>
+
+      <div class="output" id="output"></div>
+    </div>
+  </div>
+
+  <script>
+    const PASSWORD = "TEST_PASSWORD";
+    const records = [];
+
+    function checkPassword() {
+      const input = document.getElementById("password-input").value;
+      if (input === PASSWORD) {
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("password-input").classList.add("hidden");
+        document.querySelector("button").classList.add("hidden");
+        document.getElementById("main-interface").classList.remove("hidden");
+      } else {
+        alert("[...]
+
+[НЕВЕРНЫЙ_ПАРОЛЬ]
+———————————-
+[WRONG_PASSWORD]");
+      }
+    }
+
+    function showAdd() {
+      document.getElementById("add-section").classList.remove("hidden");
+      document.getElementById("view-section").classList.add("hidden");
+    }
+
+    function showView() {
+      document.getElementById("view-section").classList.remove("hidden");
+      document.getElementById("add-section").classList.add("hidden");
+      const list = records.map(r => `<p><strong>${r.title}</strong>: ${r.desc}</p>`).join("");
+      document.getElementById("records").innerHTML = list || "[ПУСТО]";
+    }
+
+    function addRecord() {
+      const title = document.getElementById("title").value;
+      const desc = document.getElementById("description").value;
+      if (title && desc) {
+        records.push({ title, desc });
+        document.getElementById("output").innerText = "[...]
+
+[ЗАПИСЬ_ДОБАВЛЕНА]";
+        document.getElementById("title").value = "";
+        document.getElementById("description").value = "";
+      } else {
+        document.getElementById("output").innerText = "[...]
+
+[ЗАПОЛНИТЕ_ВСЕ_ПОЛЯ]";
+      }
+    }
+  </script>
+</body>
+</html>
